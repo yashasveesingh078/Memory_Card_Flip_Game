@@ -1,51 +1,51 @@
 import React, { useState, useEffect } from "react";
 
-const items = ["🍎", "🍌", "🍇", "🍒", "🍎", "🍌", "🍇", "🍒"];
+const items = ["🍎","🍌","🍇","🍒","🍎","🍌","🍇","🍒"];
 
-function shuffle(array) {
+function shuffle(array){
   return [...array].sort(() => Math.random() - 0.5);
 }
 
-function GameBoard() {
-  const [cards, setCards] = useState([]);
-  const [first, setFirst] = useState(null);
-  const [second, setSecond] = useState(null);
-  const [matched, setMatched] = useState([]);
-  const [won, setWon] = useState(false);
+function GameBoard(){
+  const [cards,setCards] = useState([]);
+  const [first,setFirst] = useState(null);
+  const [second,setSecond] = useState(null);
+  const [matched,setMatched] = useState([]);
+  const [won,setWon] = useState(false);
 
-  useEffect(() => {
+  useEffect(()=>{
     setCards(shuffle(items));
-  }, []);
+  },[]);
 
-  const handleClick = (index) => {
-    if (won) return;
-    if (index === first) return;
+  const handleClick = (index)=>{
+    if(won) return;
+    if(index === first) return;
 
-    if (first === null) {
+    if(first === null){
       setFirst(index);
-    } else if (second === null) {
+    } else if(second === null){
       setSecond(index);
 
-      if (cards[index] === cards[first]) {
+      if(cards[index] === cards[first]){
         const newMatched = [...matched, cards[index]];
         setMatched(newMatched);
 
-        if (newMatched.length === 4) {
+        if(newMatched.length === 4){
           setWon(true);
         }
 
         setFirst(null);
         setSecond(null);
       } else {
-        setTimeout(() => {
+        setTimeout(()=>{
           setFirst(null);
           setSecond(null);
-        }, 800);
+        },800);
       }
     }
   };
 
-  const restartGame = () => {
+  const restartGame = ()=>{
     setCards(shuffle(items));
     setFirst(null);
     setSecond(null);
@@ -55,33 +55,19 @@ function GameBoard() {
 
   return (
     <div className="flex flex-col items-center mt-10">
-      {won && (
-        <h2 className="text-3xl font-bold text-green-600 mb-4">
-          You Won 🎉
-        </h2>
-      )}
+      {won && <h2>You Won 🎉</h2>}
 
-      <button
-        onClick={restartGame}
-        className="mb-6 px-5 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        Restart
-      </button>
+      <button onClick={restartGame}>Restart</button>
 
       <div className="grid grid-cols-4 gap-4">
-        {cards.map((item, index) => {
+        {cards.map((item,index)=>{
           const isFlipped =
             index === first ||
             index === second ||
             matched.includes(item);
 
           return (
-            <div
-              key={index}
-              onClick={() => handleClick(index)}
-              className={`w-20 h-20 flex items-center justify-center text-3xl rounded-xl cursor-pointer
-              ${isFlipped ? "bg-white" : "bg-purple-400 text-white"}`}
-            >
+            <div key={index} onClick={()=>handleClick(index)}>
               {isFlipped ? item : "❓"}
             </div>
           );
